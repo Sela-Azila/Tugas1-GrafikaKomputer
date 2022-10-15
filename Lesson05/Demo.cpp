@@ -79,7 +79,7 @@ void Demo::Update(double deltaTime) {
 	
 	// Jumlah SegmentCount
 	indexNow++;
-	if (indexNow == 400) {
+	if (indexNow == xCalculated.size()) {
 		indexNow = 0;
 	}
 }
@@ -149,6 +149,8 @@ void Demo::BuildPointBezier() {
 	
 	
 	float t = 0.0;
+	int xChecker = 0;
+	int zChecker = 0;
 
 	for (int j = 0; j < 12; j = j + 3) {
 		for (int i = 0; i <= segmentPoint; i++) {
@@ -162,8 +164,6 @@ void Demo::BuildPointBezier() {
 			// std::cout << "\nz : " << zCalculated[i] << "\n";
 		}
 
-		/*
-
 		float destinationX = xPoints[j + 3];
 		float destinationZ = zPoints[j + 3];
 		if (j == 9) {
@@ -172,40 +172,81 @@ void Demo::BuildPointBezier() {
 		}
 		
 		float distanceX = destinationX - xPoints[j + 2];
+		std::cout << "\ndestinationX : " << destinationX << "\n";
 		std::cout << "\ndistanceX : " << distanceX << "\n";
 		float distanceZ = destinationZ - zPoints[j + 2];
+		std::cout << "\ndestinationZ : " << destinationZ << "\n";
 		std::cout << "\ndistanceZ : " << distanceZ << "\n";
 
 		int totalPointDistance = 0;
 		if (distanceX == 0) {
-			totalPointDistance = abs(round(distanceZ * 100));
-			for (int i = 0; i <= totalPointDistance; i++) {
-				float tLurus = (float)i / totalPointDistance;
+			std::cout << "xChangeLurus: " << "HItung Z" << "\n";
+			totalPointDistance = abs(round(distanceZ * 2));
+			std::cout << "\ntotalPointDistanceZ : " << totalPointDistance << "\n";
+			for (int i = 0; true; i++) {
+				float tLurus = (float) i / totalPointDistance;
 				// std::cout << "\ntLurus : " << tLurus << "\n";
 				xCalculated.push_back(xPoints[j + 2]);
-				float z = zPoints[j + 2] + tLurus;
-				zCalculated.push_back(z);
+
+				float z = 0;
+				int masukZ = 0;
+				if (distanceZ > 0) {
+					masukZ++;
+					// std::cout << "masukZLurus: " << masukZ << "\n";
+					// std::cout << "distanceZ: " << distanceZ << "\n";
+					// std::cout << "destinationZ: " << destinationZ << "\n";
+					z = zPoints[j + 2] + tLurus;
+					zCalculated.push_back(z);
+					std::cout << "zCalculated+1: " << zCalculated[i + 1] << "\n";
+					zChecker++;
+					if (zCalculated[i + 1] > destinationZ) {
+						// std::cout << "break? " << true << "\n";
+						// bool isBreak = zCalculated[i + 1] < destinationZ;
+						// std::cout << "destinationZ: " << destinationZ << "\n";
+						// std::cout << isBreak << "\n";
+						break;
+					}
+				}
+				else {
+					z = zPoints[j + 2] - tLurus;
+					zCalculated.push_back(z);
+					zChecker--;
+					if (zCalculated[i+1] < destinationZ) break;
+				}
 			}
-		}
-		else if (distanceZ == 0) {
-			totalPointDistance = abs(round(distanceX * 100));
-			for (int i = 0; i <= totalPointDistance; i++) {
-				float tLurus = (float)i / totalPointDistance;
+		} else {
+			std::cout << "xChangeLurus: " << "HItung X" << "\n";
+			totalPointDistance = abs(round(distanceX * 2));
+			std::cout << "\ntotalPointDistanceX : " << totalPointDistance << "\n";
+			for (int i = 0; true; i++) {
+				float tLurus = (float) i / totalPointDistance;
 				// std::cout << "\ntLurus : " << tLurus << "\n";
 				zCalculated.push_back(zPoints[j + 2]);
-				float x = xPoints[j + 2] + tLurus;
-				xCalculated.push_back(x);
+				
+				float x = 0;
+				if (distanceX > 0) {
+					x = xPoints[j + 2] + tLurus;
+					xCalculated.push_back(x);
+					xChecker++;
+					if (xCalculated[i+1] > destinationX) break;
+				}
+				else {
+					x = xPoints[j + 2] - tLurus;
+					xCalculated.push_back(x);
+					xChecker--;
+					if (xCalculated[i+1] < destinationX) break;
+				}
 			}
 		}
-
-		*/
 	}
 
-	/* for (int i = 0; i < xCalculated.size(); i++) {
-		std::cout << "\nx : " << xCalculated[i] << "\n";
+	for (int i = 0; i < xCalculated.size(); i++) {
+		// std::cout << "xCaluclated: " << xCalculated[i] << "\n";
+		// std::cout << "zCaluclated: " << zCalculated[i] << "\n";
 	}
 
-	*/
+	std::cout << "xChangeLurus: " << xChecker << "\n";
+	std::cout << "zChangeLurus: " << zChecker << "\n";
 
 }
 
